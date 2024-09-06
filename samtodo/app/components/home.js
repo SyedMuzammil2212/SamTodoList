@@ -1,6 +1,28 @@
-import React from "react";
+"use client";
+import { createTodo, fetchTodos } from "@/api/api";
+import { useState, useEffect } from "react";
 
 const Homewrapper = () => {
+  const [todos, setTodos] = useState([]);
+  const [newTodo, setNewTodo] = useState("");
+  const [token, setToken] = useState(localStorage.getItem("token"));
+
+  useEffect(() => {
+    const fetchUserTodos = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const response = await fetchTodos(token);
+          setTodos(response.data);
+        } catch (error) {
+          console.error("Failed to fetch todos:", error);
+        }
+      }
+    };
+
+    fetchUserTodos();
+  }, []);
+
   return (
     <div className="w-full h-screen bg-[#252525] p-5">
       <div className=" w-full flex flex-col items-center justify-center ">
@@ -21,6 +43,7 @@ const Homewrapper = () => {
             placeholder="Search note..."
           />
         </div>
+        <div className=" flex flex-col gap-2 "></div>
       </div>
     </div>
   );
