@@ -2,11 +2,21 @@ const express = require("express");
 const { errorHandler } = require("./middleware/errorHandler.js");
 const connectDb = require("./config/dbConnection.js");
 const dotenv = require("dotenv").config();
+const cors = require("cors");
 
 const port = process.env.PORT || 5000;
 
 connectDb();
 const app = express();
+
+app.use(cors());
+
+// app.use(cors({
+//   origin: 'http://your-frontend-domain.com', // Replace with your frontend domain
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+//   credentials: true
+// }));
 
 app.use(express.json());
 
