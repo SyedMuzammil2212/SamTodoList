@@ -5,10 +5,12 @@ import React, { useEffect, useState } from "react";
 import { easeInOut, motion } from "framer-motion";
 import Logout from "@/app/icons/logout";
 import Spinner from "./spinner";
+import { useRouter } from "next/navigation";
 
 const Profilebar = () => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState();
+  const route = useRouter();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -68,7 +70,7 @@ const Profilebar = () => {
           onClick={() => {
             setLoading(true);
             localStorage.removeItem("token");
-            window.location.reload();
+            route.push("/login");
           }}
         >
           <Logout />
