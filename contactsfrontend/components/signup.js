@@ -12,7 +12,13 @@ const Signup = () => {
   const [name, setname] = useState("");
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
+  const [picture, setpicture] = useState();
+  const [preview, setPreview] = useState();
   const route = useRouter();
+
+  useEffect(() => {
+    console.log(picture, "pictureee");
+  }, [picture]);
 
   // References for inputs
   const emailInputRef = useRef(null);
@@ -30,13 +36,29 @@ const Signup = () => {
       alert("Please enter all details");
       return;
     }
+    const formData = new FormData();
+    formData.append("username", name);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("picture", picture);
 
-    const res = await UserRegister(name, email, password);
+    const res = await UserRegister(formData);
     console.log(res);
     if (res._id) {
       route.push("/login");
     } else {
       alert(`${res.error}`);
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      setpicture(file);
+      setPreview(URL.createObjectURL(file)); // Create preview URL
+    } else {
+      setpicture(null);
+      setPreview(null); // Reset preview if not an image
     }
   };
 
@@ -55,6 +77,25 @@ const Signup = () => {
         <div className="w-[60%] h-full bg-white rounded-l-[60px] flex flex-col items-center justify-evenly">
           <div className="font-bold text-black text-[30px]">Signup</div>
           <div className="flex flex-col gap-8">
+            {preview && (
+              <div className="mt-4 flex gap-4 items-center  ">
+                <h3>Image Preview:</h3>
+                <div className=" w-[150px] h-[150px] rounded-full border-[1px] border-gray-600">
+                  <img
+                    src={preview}
+                    alt="Selected"
+                    className=" h-full w-full rounded-full object-cover"
+                  />
+                </div>
+              </div>
+            )}
+            <input
+              className=" w-[400px] outline-none px-2 placeholder:text-[#9D9D9D] text-[16px] border-b-[1px] border-[#9D9D9D] py-2  "
+              placeholder="Uploadfile"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
             <input
               className="w-[400px] outline-none px-2 placeholder:text-[#9D9D9D] text-[16px] border-b-[1px] border-[#9D9D9D] py-2"
               placeholder="Username"

@@ -4,6 +4,7 @@ const AddContact = async (token, requestdata) => {
   console.log(token);
   const headers = {
     authorization: `Bearer ${token}`,
+    "Content-Type": "multipart/form-data",
   };
 
   try {

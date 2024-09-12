@@ -3,6 +3,7 @@ const { errorHandler } = require("./middleware/errorHandler.js");
 const connectDb = require("./config/dbConnection.js");
 const dotenv = require("dotenv").config();
 const cors = require("cors");
+const path = require("path");
 
 const port = process.env.PORT || 5000;
 
@@ -19,6 +20,8 @@ app.use(cors());
 // }));
 
 app.use(express.json());
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/api/contacts", require("./routes/contactRoutes.js"));
 app.use("/api/users", require("./routes/userRoutes.js"));

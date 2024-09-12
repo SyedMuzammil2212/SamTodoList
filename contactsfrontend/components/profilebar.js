@@ -6,6 +6,8 @@ import { easeInOut, motion } from "framer-motion";
 import Logout from "@/app/icons/logout";
 import Spinner from "./spinner";
 import { useRouter } from "next/navigation";
+import { BACKEND_URL } from "@/api/variables";
+import Image from "next/image";
 
 const Profilebar = () => {
   const [open, setOpen] = useState(false);
@@ -18,7 +20,7 @@ const Profilebar = () => {
       const res = await getUser(token);
       setData(res.data);
       setLoading(false);
-      console.log(res.data, "resss");
+      console.log(res.data, "profileData");
     };
     getUserData();
   }, []);
@@ -35,7 +37,18 @@ const Profilebar = () => {
         }}
       >
         <div className=" flex gap-2 items-center ">
-          <Profile />
+          {data.picture ? (
+            <div className=" h-[40px] w-[40px] rounded-full ">
+              <Image
+                height={40}
+                width={40}
+                className="object-cover h-full w-full rounded-full  "
+                src={`${BACKEND_URL}/uploads/${data.picture}`}
+              />
+            </div>
+          ) : (
+            <Profile />
+          )}
           <div className=" flex flex-col   ">
             <div className=" text-black text-[16px] ">{data?.username}</div>
             <div className=" text-black text-[16px] ">{data?.email}</div>
