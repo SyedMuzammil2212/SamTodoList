@@ -35,6 +35,7 @@ const Basetwo = () => {
           email={item.email}
           phone={item.phone}
           date={item.createdAt}
+          picture={item.picture}
         />
       ))}
     </div>

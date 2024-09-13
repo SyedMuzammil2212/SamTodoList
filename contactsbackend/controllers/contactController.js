@@ -1,5 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Contact = require("../models/contactModel");
+const fs = require("fs");
+const path = require("path");
 
 const getContacts = asyncHandler(async (req, res) => {
   const contacts = await Contact.find({ user_id: req.user.id });
@@ -42,9 +44,30 @@ const updateContact = asyncHandler(async (req, res) => {
     res.status(403);
     throw new Error("User dont have permission to update other user");
   }
+  if ((req.file && req.file.filename) || req.body.picture == null) {
+    const oldFilePath = `uploads/${contact.picture}`;
+
+    fs.unlink(oldFilePath, (err) => {
+      if (err) {
+        console.error("Error deleting the old file:", err);
+      } else {
+        console.log("Old file deleted successfully", oldFilePath);
+      }
+    });
+  }
   const updatedContact = await Contact.findByIdAndUpdate(
     req.params.id,
-    req.body,
+    {
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+      picture: req.file
+        ? req.file.filename
+        : req.body.picture
+        ? req.body.picture
+        : null,
+      user_id: req.user.id,
+    },
     { new: true }
   );
   res.status(200).json(updatedContact);

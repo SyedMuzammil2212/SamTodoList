@@ -76,7 +76,6 @@ const loginUser = asyncHandler(async (req, res) => {
 
 const currentUser = asyncHandler(async (req, res) => {
   res.json(req.user);
-  console.log(req.user, req.file);
 });
 
 module.exports = { registerUser, loginUser, currentUser };

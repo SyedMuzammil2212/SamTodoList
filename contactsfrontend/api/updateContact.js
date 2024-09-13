@@ -3,6 +3,7 @@ import axiosInstance from "./axiosinstance";
 const updateContact = async (token, id, requestdata) => {
   const headers = {
     authorization: `Bearer ${token}`,
+    "Content-Type": "multipart/form-data",
   };
   try {
     const response = await axiosInstance.put(`/contacts/${id}`, requestdata, {
